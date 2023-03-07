@@ -7,6 +7,8 @@ from user.serializers import TopicsSerializer
 def api_home(request, format=None):
     return Response(
         {
+            'Login': reverse("token_obtain_pair", request=request, format=format),
+            'User Register': reverse("UserRegister", request=request, format=format),
             "Users": reverse("User_Read_API", request=request, format=format),
             f"topics of {request.user.username}": reverse("Read_API", request=request, format=format),
         }

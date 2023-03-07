@@ -1,6 +1,6 @@
 from rest_framework import generics, permissions, authentication
 from user.models import User, Topic
-from .serializers import TopicsSerializer, UserSerializer
+from .serializers import TopicsSerializer, UserSerializer, RegisterSerializers
 from api.mixins import StaffEditorPermissionMixin, UserQuerySetMixin
 
 
@@ -31,3 +31,8 @@ class UserListView(StaffEditorPermissionMixin, UserQuerySetMixin, generics.ListA
 class UserRetrieveView(StaffEditorPermissionMixin, UserQuerySetMixin, generics.RetrieveAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+
+
+class UserRegisterView(generics.CreateAPIView):
+    queryset = User.objects.all()
+    serializer_class = RegisterSerializers

@@ -33,3 +33,36 @@ class UserSerializer(serializers.ModelSerializer):
 
     def get_topic_count(self, obj):
         return obj.topic_set.count()
+
+
+class RegisterSerializers(serializers.ModelSerializer):
+    username = serializers.CharField(required=True)
+    password = serializers.CharField(write_only=True, required=True)
+    password2 = serializers.CharField(write_only=True, required=True)
+
+    class Meta:
+        model = User
+        fields = [
+            'username',
+            'password',
+            'password2',
+            'first_name',
+            'last_name',
+            'picture',
+        ]
+
+    def validate(self, attrs):
+        if attrs['password'] != attrs['password2']:
+            raise serializers.ValidationError({'password': 'password not match.'})
+        return attrs
+
+    def create(self, validated_data):
+        user = User.objects.create(
+            username=validated_data['username'],
+            password=validated_data['password'],
+            first_name=validated_data['first_name'],
+            last_name=validated_data['last_name'],
+        )
+        user.save()
+
+        return user
