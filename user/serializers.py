@@ -33,12 +33,13 @@ class UserSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         user = self.context['request'].user
+        picture = self.context['request'].build_absolute_uri(instance.picture)
         if user == instance:
             return super().to_representation(instance)
         else:
             return {
                 'last_name': instance.last_name,
-                'picture': instance.picture or None
+                'picture': picture or None
             }
     def get_topic_count(self, obj):
         return obj.topic_set.count()
