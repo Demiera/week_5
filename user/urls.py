@@ -6,5 +6,5 @@ urlpatterns = [
     path('topic/<int:pk>/', views.DetailAPIView.as_view(), name='detail_API'),
     path('user/', views.UserListView.as_view(), name='User_Read_API'),
     path('user/<int:pk>/', views.UserRetrieveView.as_view(), name='User_detail_API'),
-    path('register', views.UserRegisterView.as_view(), name='UserRegister')
+    path('register/', views.UserRegisterView.as_view(), name='UserRegister')
 ]

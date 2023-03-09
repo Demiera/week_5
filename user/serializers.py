@@ -31,6 +31,15 @@ class UserSerializer(serializers.ModelSerializer):
             'topic_count',
         ]
 
+    def to_representation(self, instance):
+        user = self.context['request'].user
+        if user == instance:
+            return super().to_representation(instance)
+        else:
+            return {
+                'last_name': instance.last_name,
+                'picture': instance.picture or None
+            }
     def get_topic_count(self, obj):
         return obj.topic_set.count()
 
@@ -57,12 +66,14 @@ class RegisterSerializers(serializers.ModelSerializer):
         return attrs
 
     def create(self, validated_data):
+        username = validated_data['username']
+        last_name = validated_data.get('last_name', username)
         user = User.objects.create(
-            username=validated_data['username'],
-            password=validated_data['password'],
+            username=username,
             first_name=validated_data['first_name'],
-            last_name=validated_data['last_name'],
+            last_name=last_name,
         )
+        user.set_password(validated_data['password'])
         user.save()
 
         return user
